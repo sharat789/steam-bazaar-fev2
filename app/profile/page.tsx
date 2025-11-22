@@ -300,7 +300,7 @@ export default function ProfilePage() {
           <FormField
             label="New Password"
             name="password"
-            type="password"
+            type="text"
             placeholder="Leave blank to keep current password"
           />
           <p
