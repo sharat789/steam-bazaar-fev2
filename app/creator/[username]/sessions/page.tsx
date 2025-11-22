@@ -260,11 +260,12 @@ export default function SessionsPage({
           style={{
             padding: "3rem",
             textAlign: "center",
-            backgroundColor: "#f9fafb",
+            backgroundColor: "#1a1a1a",
+            border: "1px solid #2a2a2a",
             borderRadius: "8px",
           }}
         >
-          <p style={{ fontSize: "1.125rem", color: "#6b7280" }}>
+          <p style={{ fontSize: "1.125rem", color: "#9ca3af" }}>
             {filterStatus === "all"
               ? "No sessions yet. Create your first session to get started!"
               : `No ${filterStatus} sessions found.`}
@@ -282,16 +283,16 @@ export default function SessionsPage({
             <div
               key={session.id}
               style={{
-                border: "1px solid #e5e7eb",
+                border: "1px solid #2a2a2a",
                 borderRadius: "8px",
                 padding: "1.5rem",
-                backgroundColor: "white",
+                backgroundColor: "#1a1a1a",
                 cursor: "pointer",
                 transition: "box-shadow 0.2s",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.boxShadow =
-                  "0 4px 6px rgba(0, 0, 0, 0.1)";
+                  "0 4px 6px rgba(0, 0, 0, 0.5)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.boxShadow = "none";
@@ -309,7 +310,7 @@ export default function SessionsPage({
                   marginBottom: "0.75rem",
                 }}
               >
-                <h3 style={{ margin: 0, fontSize: "1.25rem" }}>
+                <h3 style={{ margin: 0, fontSize: "1.25rem", color: "#ffffff" }}>
                   {session.title}
                 </h3>
                 <span
@@ -345,10 +346,11 @@ export default function SessionsPage({
                   <span
                     style={{
                       padding: "0.25rem 0.5rem",
-                      backgroundColor: "#e5e7eb",
+                      backgroundColor: "#2a2a2a",
+                      border: "1px solid #3a3a3a",
                       borderRadius: "4px",
                       fontSize: "0.75rem",
-                      color: "#374151",
+                      color: "#e5e7eb",
                     }}
                   >
                     {session.category}

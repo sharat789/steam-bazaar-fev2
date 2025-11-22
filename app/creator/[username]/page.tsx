@@ -32,8 +32,10 @@ export default function CreatorsPage() {
 
   return (
     <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
-      <h1 style={{ marginBottom: "2rem" }}>Creator's Corner</h1>
-      <p style={{ marginBottom: "3rem", color: "#666" }}>
+      <h1 style={{ marginBottom: "2rem", color: "#ffffff" }}>
+        Creator's Corner
+      </h1>
+      <p style={{ marginBottom: "3rem", color: "#9ca3af" }}>
         Welcome back, {user.username}! Manage your content and grow your
         audience.
       </p>
@@ -50,25 +52,27 @@ export default function CreatorsPage() {
           href={`/creator/${username}/products`}
           style={{
             textDecoration: "none",
-            color: "black",
+            color: "#ffffff",
             padding: "2rem",
-            backgroundColor: "#7cc704ff",
+            backgroundColor: "#1a1a1a",
             borderRadius: "8px",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            border: "1px solid #2a2a2a",
+            borderLeft: "4px solid #10b981",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
             transition: "transform 0.2s, box-shadow 0.2s",
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.transform = "translateY(-4px)";
-            e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.15)";
+            e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.4)";
           }}
           onMouseOut={(e) => {
             e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+            e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
           }}
         >
           <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📦</div>
-          <h2 style={{ marginBottom: "0.5rem" }}>Products</h2>
-          <p style={{ color: "#000000ff" }}>
+          <h2 style={{ marginBottom: "0.5rem", color: "#ffffff" }}>Products</h2>
+          <p style={{ color: "#9ca3af" }}>
             Manage your product catalog, pricing, and inventory
           </p>
         </Link>
@@ -78,25 +82,29 @@ export default function CreatorsPage() {
           href={`/creator/${username}/sessions`}
           style={{
             textDecoration: "none",
-            color: "black",
+            color: "#ffffff",
             padding: "2rem",
-            backgroundColor: "#08529bff",
+            backgroundColor: "#1a1a1a",
             borderRadius: "8px",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            border: "1px solid #2a2a2a",
+            borderLeft: "4px solid #3b82f6",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
             transition: "transform 0.2s, box-shadow 0.2s",
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.transform = "translateY(-4px)";
-            e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.15)";
+            e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.4)";
           }}
           onMouseOut={(e) => {
             e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+            e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
           }}
         >
           <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🎥</div>
-          <h2 style={{ marginBottom: "0.5rem" }}>Live Sessions</h2>
-          <p style={{ color: "#000000ff" }}>
+          <h2 style={{ marginBottom: "0.5rem", color: "#ffffff" }}>
+            Live Sessions
+          </h2>
+          <p style={{ color: "#9ca3af" }}>
             View your streaming history and session analytics
           </p>
         </Link>
@@ -105,88 +113,32 @@ export default function CreatorsPage() {
           href={`/creator/${username}/analytics`}
           style={{
             textDecoration: "none",
-            color: "black",
+            color: "#ffffff",
             padding: "2rem",
-            backgroundColor: "#b1416fff",
+            backgroundColor: "#1a1a1a",
             borderRadius: "8px",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            border: "1px solid #2a2a2a",
+            borderLeft: "4px solid #8b5cf6",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
             transition: "transform 0.2s, box-shadow 0.2s",
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.transform = "translateY(-4px)";
-            e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.15)";
+            e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.4)";
           }}
           onMouseOut={(e) => {
             e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+            e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
           }}
         >
           <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📊</div>
-          <h2 style={{ marginBottom: "0.5rem" }}>Analytics</h2>
-          <p style={{ color: "#000000ff" }}>
+          <h2 style={{ marginBottom: "0.5rem", color: "#ffffff" }}>
+            Analytics
+          </h2>
+          <p style={{ color: "#9ca3af" }}>
             Track views, engagement, and revenue metrics
           </p>
         </Link>
-      </div>
-
-      <div
-        style={{
-          marginTop: "3rem",
-          padding: "2rem",
-          backgroundColor: "#07b5beff",
-          borderRadius: "8px",
-        }}
-      >
-        <h2 style={{ color: "#000000ff", marginBottom: "1rem" }}>
-          Quick Stats
-        </h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "1rem",
-          }}
-        >
-          <div>
-            <p
-              style={{
-                color: "#000000ff",
-                fontSize: "2rem",
-                fontWeight: "bold",
-                margin: 0,
-              }}
-            >
-              0
-            </p>
-            <p style={{ color: "#000000ff", margin: 0 }}>Total Products</p>
-          </div>
-          <div>
-            <p
-              style={{
-                color: "#000000ff",
-                fontSize: "2rem",
-                fontWeight: "bold",
-                margin: 0,
-              }}
-            >
-              0
-            </p>
-            <p style={{ color: "#000000ff", margin: 0 }}>Live Sessions</p>
-          </div>
-          <div>
-            <p
-              style={{
-                color: "#000000ff",
-                fontSize: "2rem",
-                fontWeight: "bold",
-                margin: 0,
-              }}
-            >
-              0
-            </p>
-            <p style={{ color: "#000000ff", margin: 0 }}>Total Views</p>
-          </div>
-        </div>
       </div>
     </div>
   );

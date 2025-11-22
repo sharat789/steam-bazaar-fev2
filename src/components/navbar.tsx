@@ -193,8 +193,8 @@ export default function Navbar() {
               href="/register"
               style={{
                 padding: "0.5rem 1.5rem",
-                backgroundColor: "white",
-                color: "black",
+                backgroundColor: "#3b82f6",
+                color: "#ffffff",
                 textDecoration: "none",
                 borderRadius: "20px",
                 fontWeight: "bold",

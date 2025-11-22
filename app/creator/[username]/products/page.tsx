@@ -121,29 +121,75 @@ export default function ProductsPage() {
   };
 
   if (loading) {
-    return <p>Loading products...</p>;
+    return (
+      <div style={{ padding: "2rem", color: "#9ca3af" }}>
+        <p>Loading products...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
+    return (
+      <div
+        style={{
+          padding: "2rem",
+          backgroundColor: "#7f1d1d",
+          color: "#fca5a5",
+          borderRadius: "8px",
+          margin: "2rem",
+        }}
+      >
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Products</h1>
+    <div style={{ padding: "2rem", maxWidth: "1400px", margin: "0 auto" }}>
+      <div style={{ marginBottom: "2rem" }}>
+        <h1 style={{ color: "#ffffff", marginBottom: "0.5rem" }}>Products</h1>
+        <p style={{ color: "#9ca3af" }}>
+          Manage your product catalog for live streaming sessions
+        </p>
+      </div>
 
-      <div style={{ marginBottom: "1rem", marginTop: "2rem" }}>
+      <div
+        style={{
+          marginBottom: "2rem",
+          display: "flex",
+          gap: "1rem",
+          alignItems: "center",
+          flexWrap: "wrap",
+        }}
+      >
         <input
           type="text"
           placeholder="Search products..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ padding: "0.5rem", marginRight: "1rem" }}
+          style={{
+            padding: "0.75rem",
+            backgroundColor: "#2a2a2a",
+            border: "1px solid #3a3a3a",
+            borderRadius: "6px",
+            color: "#ffffff",
+            fontSize: "0.875rem",
+            outline: "none",
+            minWidth: "250px",
+          }}
         />
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          style={{ padding: "0.5rem", marginRight: "1rem" }}
+          style={{
+            padding: "0.75rem",
+            backgroundColor: "#2a2a2a",
+            border: "1px solid #3a3a3a",
+            borderRadius: "6px",
+            color: "#ffffff",
+            fontSize: "0.875rem",
+            outline: "none",
+          }}
         >
           <option value="All">All Categories</option>
           <option value="Electronics">Electronics</option>
@@ -152,35 +198,163 @@ export default function ProductsPage() {
         </select>
         <button
           onClick={() => setAddProductModal(true)}
-          style={{ padding: "0.5rem 1rem" }}
+          style={{
+            padding: "0.75rem 1.5rem",
+            backgroundColor: "#3b82f6",
+            color: "#ffffff",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontSize: "0.875rem",
+            fontWeight: "500",
+          }}
         >
-          Add Product
+          + Add Product
         </button>
       </div>
 
       {filteredProducts.length === 0 ? (
-        <p>No products found.</p>
+        <div
+          style={{
+            padding: "4rem 2rem",
+            textAlign: "center",
+            backgroundColor: "#1a1a1a",
+            border: "1px solid #2a2a2a",
+            borderRadius: "8px",
+          }}
+        >
+          <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📦</div>
+          <h2 style={{ color: "#ffffff", marginBottom: "0.5rem" }}>
+            No Products Found
+          </h2>
+          <p style={{ color: "#9ca3af" }}>
+            {searchQuery || filterCategory !== "All"
+              ? "Try adjusting your search or filters"
+              : "Add your first product to get started"}
+          </p>
+        </div>
       ) : (
-        <ul>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+            gap: "1.5rem",
+          }}
+        >
           {filteredProducts.map((product) => (
-            <li key={product.id} style={{ marginBottom: "1rem" }}>
-              <strong>{product.name}</strong> - ${product.price}{" "}
-              {product.category && <em>({product.category})</em>}
-              <button
-                onClick={() => openEditModal(product)}
-                style={{ marginLeft: "1rem", color: "blue" }}
+            <div
+              key={product.id}
+              style={{
+                backgroundColor: "#1a1a1a",
+                border: "1px solid #2a2a2a",
+                borderRadius: "8px",
+                padding: "1.5rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+              }}
+            >
+              <div>
+                <h3
+                  style={{
+                    margin: "0 0 0.5rem 0",
+                    color: "#ffffff",
+                    fontSize: "1.125rem",
+                  }}
+                >
+                  {product.name}
+                </h3>
+                <p
+                  style={{
+                    margin: "0 0 0.5rem 0",
+                    color: "#9ca3af",
+                    fontSize: "0.875rem",
+                    lineHeight: "1.5",
+                  }}
+                >
+                  {product.description}
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.75rem",
+                    marginTop: "0.75rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      color: "#10b981",
+                      fontSize: "1.25rem",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    ${Number(product.price).toFixed(2)}
+                  </span>
+                  {product.category && (
+                    <span
+                      style={{
+                        padding: "0.25rem 0.5rem",
+                        backgroundColor: "#2a2a2a",
+                        border: "1px solid #3a3a3a",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                        color: "#e5e7eb",
+                      }}
+                    >
+                      {product.category}
+                    </span>
+                  )}
+                  <span
+                    style={{
+                      padding: "0.25rem 0.5rem",
+                      backgroundColor: product.inStock ? "#065f46" : "#7f1d1d",
+                      borderRadius: "4px",
+                      fontSize: "0.75rem",
+                      color: "#ffffff",
+                    }}
+                  >
+                    {product.inStock ? "In Stock" : "Out of Stock"}
+                  </span>
+                </div>
+              </div>
+              <div
+                style={{ display: "flex", gap: "0.5rem", marginTop: "auto" }}
               >
-                Edit
-              </button>
-              <button
-                onClick={() => deleteProduct(product.id)}
-                style={{ marginLeft: "1rem", color: "red" }}
-              >
-                Delete
-              </button>
-            </li>
+                <button
+                  onClick={() => openEditModal(product)}
+                  style={{
+                    flex: 1,
+                    padding: "0.5rem 1rem",
+                    backgroundColor: "#3b82f6",
+                    color: "#ffffff",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => deleteProduct(product.id)}
+                  style={{
+                    flex: 1,
+                    padding: "0.5rem 1rem",
+                    backgroundColor: "#374151",
+                    color: "#ffffff",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
 
       {/* Add Product Modal */}

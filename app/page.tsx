@@ -61,9 +61,9 @@ export default function Home() {
           onClick={() => setCategory("")}
           style={{
             padding: "0.5rem 1rem",
-            backgroundColor: category === "" ? "#3b82f6" : "#e5e7eb",
-            color: category === "" ? "white" : "#374151",
-            border: "none",
+            backgroundColor: category === "" ? "#3b82f6" : "#2a2a2a",
+            color: "#ffffff",
+            border: category === "" ? "none" : "1px solid #3a3a3a",
             borderRadius: "6px",
             cursor: "pointer",
             fontWeight: "500",
@@ -77,9 +77,9 @@ export default function Home() {
             onClick={() => setCategory(cat)}
             style={{
               padding: "0.5rem 1rem",
-              backgroundColor: category === cat ? "#3b82f6" : "#e5e7eb",
-              color: category === cat ? "white" : "#374151",
-              border: "none",
+              backgroundColor: category === cat ? "#3b82f6" : "#2a2a2a",
+              color: "#ffffff",
+              border: category === cat ? "none" : "1px solid #3a3a3a",
               borderRadius: "6px",
               cursor: "pointer",
               fontWeight: "500",
@@ -124,15 +124,16 @@ export default function Home() {
           style={{
             textAlign: "center",
             padding: "4rem 2rem",
-            backgroundColor: "#f9fafb",
+            backgroundColor: "#1a1a1a",
+            border: "1px solid #2a2a2a",
             borderRadius: "12px",
           }}
         >
           <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📺</div>
-          <h2 style={{ color: "#374151", marginBottom: "0.5rem" }}>
+          <h2 style={{ color: "#ffffff", marginBottom: "0.5rem" }}>
             No Live Streams
           </h2>
-          <p style={{ color: "#6b7280" }}>
+          <p style={{ color: "#9ca3af" }}>
             {category
               ? `No streams in "${category}" category right now`
               : "No one is streaming right now. Check back later!"}
@@ -154,22 +155,22 @@ export default function Home() {
                 router.push(`/watch/${user.liveSession.id}`)
               }
               style={{
-                backgroundColor: "white",
-                border: "1px solid #e5e7eb",
+                backgroundColor: "#1a1a1a",
+                border: "1px solid #2a2a2a",
                 borderRadius: "12px",
                 overflow: "hidden",
                 cursor: "pointer",
                 transition: "all 0.2s",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "translateY(-4px)";
                 e.currentTarget.style.boxShadow =
-                  "0 10px 20px rgba(0,0,0,0.15)";
+                  "0 10px 20px rgba(0,0,0,0.5)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+                e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
               }}
             >
               {/* Thumbnail */}
@@ -227,7 +228,7 @@ export default function Home() {
                     margin: "0 0 0.5rem 0",
                     fontSize: "1.125rem",
                     fontWeight: "600",
-                    color: "#111827",
+                    color: "#ffffff",
                   }}
                 >
                   {user.liveSession?.title || "Live Stream"}
@@ -257,7 +258,7 @@ export default function Home() {
                   >
                     {user.username.charAt(0).toUpperCase()}
                   </div>
-                  <span style={{ color: "#374151", fontWeight: "500" }}>
+                  <span style={{ color: "#e5e7eb", fontWeight: "500" }}>
                     {user.username}
                   </span>
                 </div>
@@ -267,10 +268,11 @@ export default function Home() {
                     <span
                       style={{
                         padding: "0.25rem 0.75rem",
-                        backgroundColor: "#e5e7eb",
+                        backgroundColor: "#2a2a2a",
+                        border: "1px solid #3a3a3a",
                         borderRadius: "12px",
                         fontSize: "0.75rem",
-                        color: "#374151",
+                        color: "#e5e7eb",
                         fontWeight: "500",
                       }}
                     >
