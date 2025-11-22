@@ -1,65 +1,318 @@
-import Image from "next/image";
+"use client";
+import { userService } from "@/src/services/user.service";
+import { LiveUser } from "@/src/types/user";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+  const [liveUsers, setLiveUsers] = useState<LiveUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [category, setCategory] = useState("");
+
+  useEffect(() => {
+    fetchLiveUsers();
+    // Auto-refresh every 30 seconds
+    const interval = setInterval(fetchLiveUsers, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchLiveUsers = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await userService.getLiveUsers();
+      setLiveUsers(response);
+    } catch (error) {
+      setError("Failed to fetch live users");
+      console.error("Error fetching live users:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredUsers = category
+    ? liveUsers.filter((user) => user.liveSession?.category === category)
+    : liveUsers;
+
+  const uniqueCategories = Array.from(
+    new Set(
+      liveUsers
+        .map((u) => u.liveSession?.category)
+        .filter((c): c is string => !!c)
+    )
+  );
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div style={{ padding: "2rem", maxWidth: "1400px", margin: "0 auto" }}>
+      <div style={{ marginBottom: "2rem" }}>
+        <h1 style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>
+          🔴 Live Now
+        </h1>
+        <p style={{ color: "#6b7280", fontSize: "1.125rem" }}>
+          Watch live streams from creators around the world
+        </p>
+      </div>
+
+      {/* Filters */}
+      <div style={{ marginBottom: "2rem", display: "flex", gap: "1rem", alignItems: "center" }}>
+        <button
+          onClick={() => setCategory("")}
+          style={{
+            padding: "0.5rem 1rem",
+            backgroundColor: category === "" ? "#3b82f6" : "#e5e7eb",
+            color: category === "" ? "white" : "#374151",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontWeight: "500",
+          }}
+        >
+          All
+        </button>
+        {uniqueCategories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setCategory(cat)}
+            style={{
+              padding: "0.5rem 1rem",
+              backgroundColor: category === cat ? "#3b82f6" : "#e5e7eb",
+              color: category === cat ? "white" : "#374151",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontWeight: "500",
+            }}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {loading && liveUsers.length === 0 ? (
+        <div style={{ textAlign: "center", padding: "3rem", color: "#6b7280" }}>
+          <p>Loading live streams...</p>
+        </div>
+      ) : error ? (
+        <div
+          style={{
+            padding: "2rem",
+            backgroundColor: "#fee2e2",
+            borderRadius: "8px",
+            color: "#991b1b",
+          }}
+        >
+          {error}
+          <button
+            onClick={fetchLiveUsers}
+            style={{
+              marginLeft: "1rem",
+              padding: "0.5rem 1rem",
+              backgroundColor: "#ef4444",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Retry
+          </button>
+        </div>
+      ) : filteredUsers.length === 0 ? (
+        <div
+          style={{
+            textAlign: "center",
+            padding: "4rem 2rem",
+            backgroundColor: "#f9fafb",
+            borderRadius: "12px",
+          }}
+        >
+          <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📺</div>
+          <h2 style={{ color: "#374151", marginBottom: "0.5rem" }}>
+            No Live Streams
+          </h2>
+          <p style={{ color: "#6b7280" }}>
+            {category
+              ? `No streams in "${category}" category right now`
+              : "No one is streaming right now. Check back later!"}
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
+            gap: "1.5rem",
+          }}
+        >
+          {filteredUsers.map((user) => (
+            <div
+              key={user.id}
+              onClick={() =>
+                user.liveSession &&
+                router.push(`/watch/${user.liveSession.id}`)
+              }
+              style={{
+                backgroundColor: "white",
+                border: "1px solid #e5e7eb",
+                borderRadius: "12px",
+                overflow: "hidden",
+                cursor: "pointer",
+                transition: "all 0.2s",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-4px)";
+                e.currentTarget.style.boxShadow =
+                  "0 10px 20px rgba(0,0,0,0.15)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+              }}
+            >
+              {/* Thumbnail */}
+              <div
+                style={{
+                  backgroundColor: "#000",
+                  aspectRatio: "16/9",
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "1rem",
+                    left: "1rem",
+                    backgroundColor: "#ef4444",
+                    color: "white",
+                    padding: "0.25rem 0.75rem",
+                    borderRadius: "4px",
+                    fontSize: "0.875rem",
+                    fontWeight: "bold",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "8px",
+                      height: "8px",
+                      backgroundColor: "white",
+                      borderRadius: "50%",
+                      animation: "pulse 2s infinite",
+                    }}
+                  />
+                  LIVE
+                </div>
+                <div
+                  style={{
+                    fontSize: "4rem",
+                    opacity: 0.3,
+                  }}
+                >
+                  🎥
+                </div>
+              </div>
+
+              {/* Content */}
+              <div style={{ padding: "1rem" }}>
+                <h3
+                  style={{
+                    margin: "0 0 0.5rem 0",
+                    fontSize: "1.125rem",
+                    fontWeight: "600",
+                    color: "#111827",
+                  }}
+                >
+                  {user.liveSession?.title || "Live Stream"}
+                </h3>
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    marginBottom: "0.75rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      backgroundColor: "#3b82f6",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "white",
+                      fontWeight: "bold",
+                      fontSize: "0.875rem",
+                    }}
+                  >
+                    {user.username.charAt(0).toUpperCase()}
+                  </div>
+                  <span style={{ color: "#374151", fontWeight: "500" }}>
+                    {user.username}
+                  </span>
+                </div>
+
+                {user.liveSession?.category && (
+                  <div>
+                    <span
+                      style={{
+                        padding: "0.25rem 0.75rem",
+                        backgroundColor: "#e5e7eb",
+                        borderRadius: "12px",
+                        fontSize: "0.75rem",
+                        color: "#374151",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {user.liveSession.category}
+                    </span>
+                  </div>
+                )}
+
+                {user.liveSession?.description && (
+                  <p
+                    style={{
+                      color: "#6b7280",
+                      fontSize: "0.875rem",
+                      marginTop: "0.75rem",
+                      marginBottom: 0,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                    }}
+                  >
+                    {user.liveSession.description}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
-      </main>
+      )}
+
+      <style jsx>{`
+        @keyframes pulse {
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.5;
+          }
+        }
+      `}</style>
     </div>
   );
 }
