@@ -1,36 +1,151 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stream Bazaar
+
+A live streaming e-commerce platform that enables creators to broadcast live video sessions while showcasing and selling products in real-time.
+
+## Overview
+
+Stream Bazaar combines live video streaming with e-commerce, allowing creators to engage with viewers through real-time chat while showcasing products during live sessions. Built with modern web technologies and optimized for scalable, interactive experiences.
+
+## Tech Stack
+
+- **Frontend Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Video Streaming:** Agora RTC SDK (WebRTC)
+- **Real-time Chat:** Socket.IO Client
+- **HTTP Client:** Axios
+
+## Key Features
+
+- **User Authentication:** JWT-based auth with role-based access (creators & viewers)
+- **Live Streaming:** Real-time video broadcasting using Agora WebRTC
+- **Product Management:** Full CRUD operations for product catalogs
+- **Session Management:** Create, schedule, and control live streaming sessions
+- **Real-time Chat:** Live chat with viewer count and message history
+- **Creator Dashboard:** Session controls with start/pause/resume/end streaming
+- **Viewer Experience:** Browse live streams, watch sessions, and interact via chat
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ and pnpm
+- Backend API running on `http://localhost:3000`
+- Agora account with App ID and Certificate ([console.agora.io](https://console.agora.io/))
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+3. Configure environment variables:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+4. Update `.env.local` with your configuration:
+   ```env
+   NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
+   NEXT_PUBLIC_AGORA_APP_ID=your_agora_app_id
+   WEBSOCKET_URL=ws://localhost:3000
+   ```
+
+### Development
+
+Run the development server (default port 3001):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Build for production:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run production build:
 
-## Learn More
+```bash
+pnpm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+Lint code:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+app/                        # Next.js App Router pages
+├── page.tsx               # Homepage (browse live streams)
+├── login/                 # Authentication pages
+├── register/
+├── profile/
+├── watch/[sessionId]/    # Viewer watch page
+└── creator/[username]/   # Creator dashboard
+    ├── products/         # Product management
+    └── sessions/         # Session management & controls
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+src/
+├── components/           # Reusable React components
+├── contexts/            # React Context (auth)
+├── hooks/               # Custom hooks (Agora, WebSocket)
+├── lib/                 # API clients & utilities
+├── services/            # API service layer
+└── types/               # TypeScript type definitions
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Architecture Highlights
+
+### Live Streaming Flow
+
+**Creator (Publisher):**
+
+1. Start stream → Request Agora token from backend
+2. Join Agora channel as `host` role
+3. Publish camera/microphone tracks
+4. Display local video preview
+
+**Viewer (Subscriber):**
+
+1. Join session → Request Agora token from backend
+2. Join Agora channel as `audience` role
+3. Subscribe to creator's video/audio tracks
+4. Display remote video stream
+
+### Real-time Chat
+
+- Socket.IO WebSocket connection with auto-reconnect
+- Room-based messaging per session
+- Backend automatically determines role (publisher vs subscriber)
+- Viewer count tracking and real-time updates
+
+### Authentication
+
+- JWT tokens stored in localStorage
+- Auto-refresh on app load
+- Request interceptor adds Bearer token to all API calls
+- Automatic logout on 401 responses
+
+## API Integration
+
+The frontend communicates with a REST API backend. See `AVAILABLE_API_ROUTES.MD` for complete API documentation.
+
+**Base URL:** `http://localhost:3000/api`
+
+**Key Endpoints:**
+
+- `/auth/login`, `/auth/register` - Authentication
+- `/sessions` - Session CRUD
+- `/sessions/:id/start-stream` - Get publisher token
+- `/sessions/:id/stream-token` - Get viewer token
+- `/products` - Product management
+- `/users/live` - Get live streaming creators
