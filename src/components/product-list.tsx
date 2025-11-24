@@ -194,10 +194,6 @@ export const ProductList: React.FC<ProductListProps> = ({
                   const stats = getProductStats(activeProduct.id);
                   if (stats) {
                     const uniqueClicks = stats.uniqueClicks ?? 0;
-                    const conversionRate =
-                      typeof stats.conversionRate === "number"
-                        ? stats.conversionRate
-                        : parseFloat(stats.conversionRate as any) || 0;
 
                     return (
                       <div
@@ -213,10 +209,6 @@ export const ProductList: React.FC<ProductListProps> = ({
                         <div style={{ marginBottom: "0.25rem" }}>
                           <span style={{ fontWeight: "600" }}>
                             {uniqueClicks} click{uniqueClicks !== 1 ? "s" : ""}
-                          </span>
-                          {" • "}
-                          <span style={{ color: "#10b981", fontWeight: "600" }}>
-                            {stats.conversionRate}% conversion
                           </span>
                         </div>
                       </div>
