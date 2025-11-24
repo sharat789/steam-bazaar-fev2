@@ -55,7 +55,6 @@ export const useAgoraStream = (options?: UseAgoraStreamOptions) => {
           });
         }
       } catch (err) {
-        console.error("Error initializing Agora:", err);
         setError("Failed to initialize Agora SDK");
       }
     };
@@ -82,7 +81,6 @@ export const useAgoraStream = (options?: UseAgoraStreamOptions) => {
       try {
         setError(null);
 
-        console.log("Setting client role to host...");
         // Set client role to host
         const { setClientRole } = await import("@/src/lib/agora-client");
         await setClientRole(client, "host");
@@ -107,7 +105,6 @@ export const useAgoraStream = (options?: UseAgoraStreamOptions) => {
         );
         setIsJoined(true);
       } catch (err) {
-        console.error("Error joining channel as host:", err);
         setError(err instanceof Error ? err.message : "Failed to join channel");
         throw err;
       }
@@ -124,7 +121,6 @@ export const useAgoraStream = (options?: UseAgoraStreamOptions) => {
 
     // Check actual connection state instead of relying on state
     if (client.connectionState !== "CONNECTED") {
-      console.error("Client connection state:", client.connectionState);
       setError(
         "Must join channel before publishing. Connection state: " +
           client.connectionState
@@ -135,25 +131,19 @@ export const useAgoraStream = (options?: UseAgoraStreamOptions) => {
     try {
       setError(null);
 
-      console.log("Creating camera and microphone tracks...");
       // Create camera and microphone tracks
       const [videoTrack, audioTrack] = await Promise.all([
         agoraRTC.createCameraVideoTrack(),
         agoraRTC.createMicrophoneAudioTrack(),
       ]);
 
-      console.log("Tracks created successfully");
       setLocalVideoTrack(videoTrack);
       setLocalAudioTrack(audioTrack);
 
       // Publish tracks to the channel
-      console.log("Publishing tracks to channel...");
       await client.publish([videoTrack, audioTrack]);
       setIsPublishing(true);
-
-      console.log("Successfully publishing video and audio");
     } catch (err) {
-      console.error("Error starting publishing:", err);
       setError(
         err instanceof Error ? err.message : "Failed to start publishing"
       );
@@ -178,10 +168,7 @@ export const useAgoraStream = (options?: UseAgoraStreamOptions) => {
       setLocalVideoTrack(null);
       setLocalAudioTrack(null);
       setIsPublishing(false);
-
-      console.log("Stopped publishing");
     } catch (err) {
-      console.error("Error stopping publishing:", err);
       setError(
         err instanceof Error ? err.message : "Failed to stop publishing"
       );
@@ -203,10 +190,7 @@ export const useAgoraStream = (options?: UseAgoraStreamOptions) => {
         await client.leave();
         setIsJoined(false);
       }
-
-      console.log("Left channel");
     } catch (err) {
-      console.error("Error leaving channel:", err);
       setError(err instanceof Error ? err.message : "Failed to leave channel");
     }
   }, [client, isJoined, isPublishing, stopPublishing]);

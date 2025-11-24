@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 interface FormFieldProps {
   label: string;
   name: string;
-  type?: "text" | "number" | "textarea" | "checkbox" | "select";
+  type?: "text" | "password" | "email" | "number" | "textarea" | "checkbox" | "select";
   required?: boolean;
   placeholder?: string;
   defaultValue?: string | number | boolean;

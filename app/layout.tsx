@@ -4,6 +4,12 @@ import "./globals.css";
 import { AuthProvider } from "@/src/contexts/auth-context";
 import Navbar from "@/src/components/navbar";
 import "@fontsource/fira-code";
+import { validateClientEnv } from "@/src/lib/env-validation";
+
+// Validate environment variables at build time
+if (process.env.NODE_ENV === 'production') {
+  validateClientEnv();
+}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

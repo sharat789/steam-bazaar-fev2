@@ -31,12 +31,12 @@ export default function WatchPage({
   const [activeProductId, setActiveProductId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [viewerCount, setViewerCount] = useState(0);
-  const [trendingProducts, setTrendingProducts] = useState<TrendingProductsData | null>(null);
+  const [trendingProducts, setTrendingProducts] =
+    useState<TrendingProductsData | null>(null);
   const { reactions, addReaction, removeReaction } = useReactionOverlay();
 
   const {
     remoteVideoTrack,
-    remoteAudioTrack,
     isJoined,
     error: agoraError,
     joinAsAudience,
@@ -48,7 +48,7 @@ export default function WatchPage({
     sendMessage,
     sendProductClick,
     isConnected: wsConnected,
-    error: wsError
+    error: wsError,
   } = useWebSocket({
     sessionId,
     userId: user?.id ? Number(user.id) : undefined,
@@ -63,15 +63,12 @@ export default function WatchPage({
       addReaction(reaction);
     },
     onProductShowcased: (data) => {
-      console.log("Product showcased:", data);
       setActiveProductId(data.productId);
     },
     onShowcaseCleared: () => {
-      console.log("Showcase cleared");
       setActiveProductId(null);
     },
     onTrendingProducts: (data: TrendingProductsData) => {
-      console.log("Received trending products:", data);
       setTrendingProducts(data);
     },
   });
@@ -80,7 +77,11 @@ export default function WatchPage({
     const success = sendReaction(type);
     if (success) {
       // Optimistically show own reaction
-      addReaction({ type, timestamp: new Date(), userId: user?.id ? Number(user.id) : undefined });
+      addReaction({
+        type,
+        timestamp: new Date(),
+        userId: user?.id ? Number(user.id) : undefined,
+      });
     }
   };
 
@@ -99,9 +100,7 @@ export default function WatchPage({
     try {
       setLoading(true);
       setError(null);
-      console.log("Fetching session:", sessionId);
       const data = await sessionService.getById(sessionId);
-      console.log("Session data:", data);
       setSession(data);
 
       // Initialize activeProductId from session data
@@ -114,7 +113,6 @@ export default function WatchPage({
         await handleJoinStream();
       }
     } catch (err) {
-      console.error("Error fetching session:", err);
       setError("Failed to load session");
     } finally {
       setLoading(false);
@@ -128,7 +126,6 @@ export default function WatchPage({
       setIsJoining(true);
       setError(null);
 
-      console.log("Getting stream token for viewer...");
       // Get viewer token from backend
       const token = await sessionService.getStreamToken(sessionId);
       console.log("Received viewer token:", {
@@ -141,11 +138,8 @@ export default function WatchPage({
       setStreamToken(token);
 
       // Join as audience
-      console.log("Joining as audience...");
       await joinAsAudience(token);
-      console.log("Successfully joined as audience");
     } catch (err) {
-      console.error("Error joining stream:", err);
       setError(err instanceof Error ? err.message : "Failed to join stream");
     } finally {
       setIsJoining(false);
@@ -244,21 +238,6 @@ export default function WatchPage({
           }}
         >
           {error}
-        </div>
-      )}
-
-      {agoraError && (
-        <div
-          style={{
-            padding: "1rem",
-            backgroundColor: "#fee2e2",
-            border: "1px solid #ef4444",
-            borderRadius: "6px",
-            marginBottom: "1rem",
-            color: "#991b1b",
-          }}
-        >
-          Agora Error: {agoraError}
         </div>
       )}
 

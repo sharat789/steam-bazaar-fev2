@@ -64,7 +64,7 @@ export default function ProfilePage() {
         setSuccess("Profile updated successfully!");
         setTimeout(() => {
           setEditProfileModal(false);
-          window.location.reload(); // Refresh to get updated user data
+          setSuccess(null);
         }, 1500);
       } else {
         setError(
@@ -73,7 +73,6 @@ export default function ProfilePage() {
         );
       }
     } catch (err) {
-      console.error("Failed to update profile:", err);
       setError("Failed to update profile. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -292,7 +291,7 @@ export default function ProfilePage() {
           <FormField
             label="Email"
             name="email"
-            type="text"
+            type="email"
             required
             defaultValue={user.email}
             placeholder="Enter your email"
@@ -300,7 +299,7 @@ export default function ProfilePage() {
           <FormField
             label="New Password"
             name="password"
-            type="text"
+            type="password"
             placeholder="Leave blank to keep current password"
           />
           <p

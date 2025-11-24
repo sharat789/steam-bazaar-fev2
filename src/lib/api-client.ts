@@ -31,7 +31,16 @@ apiClient.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          localStorage.removeItem("authToken");
+          // Clear auth tokens
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("refreshToken");
+
+            // Redirect to login page if not already there
+            if (window.location.pathname !== "/login") {
+              window.location.href = "/login";
+            }
+          }
           break;
         case 403:
           console.error(
@@ -39,10 +48,8 @@ apiClient.interceptors.response.use(
           );
           break;
         case 404:
-          console.error("Resource not found");
           break;
         case 500:
-          console.error("Server error: Please try again later");
           break;
         default:
           console.error(
@@ -51,9 +58,7 @@ apiClient.interceptors.response.use(
           );
       }
     } else if (error.request) {
-      console.error("Network error: Please check your connection");
     } else {
-      console.error("Error:", error.message);
     }
     return Promise.reject(error);
   }

@@ -20,29 +20,22 @@ class WebSocketClient {
     this.ws = new WebSocket(url);
 
     this.ws.onopen = () => {
-      console.log("WebSocket connected");
       this.reconnectAttempts = 0;
     };
 
-    this.ws.onmessage = (event) => {
-      console.log("Message received:", event.data);
-    };
+    this.ws.onmessage = (event) => {};
 
     this.ws.onclose = () => {
-      console.log("WebSocket disconnected");
       this.reconnect();
     };
 
-    this.ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
+    this.ws.onerror = (error) => {};
   }
 
   send(data: string): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(data);
     } else {
-      console.warn("WebSocket is not connected");
     }
   }
 
@@ -57,7 +50,6 @@ class WebSocketClient {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       this.reconnectAttempts++;
       setTimeout(() => {
-        console.log(`Reconnecting... attempt ${this.reconnectAttempts}`);
         this.connect(this.url);
       }, this.reconnectInterval * this.reconnectAttempts);
     }

@@ -34,14 +34,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         if (AuthService.isAuthenticated()) {
           const response = await AuthService.getCurrentUser();
-          console.log("Auth Context - Full Response:", response);
           if (response.success) {
             setUser(response.data);
-            console.log("Auth Context - User set to:", response.data);
           }
         }
       } catch (error) {
-        console.error("Failed to fetch current user", error);
         AuthService.logout();
       } finally {
         setIsLoading(false);

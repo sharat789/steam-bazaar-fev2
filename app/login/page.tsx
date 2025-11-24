@@ -1,9 +1,11 @@
 "use client";
 
 import { useAuth } from "@/src/contexts/auth-context";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginPage() {
+  const router = useRouter();
   const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +19,7 @@ export default function LoginPage() {
     try {
       await login(username, password);
       setTimeout(() => {
-        window.location.href = "/";
+        router.push("/");
       }, 100);
     } catch (err) {
       setError("Login failed. Error: " + (err as Error).message);

@@ -27,22 +27,20 @@ export const ProductList: React.FC<ProductListProps> = ({
   trendingProducts = [],
   onProductClick,
 }) => {
-  // Helper: Get conversion stats for a specific product
-  const getProductStats = (productId: string): ProductConversionStats | undefined => {
+  const getProductStats = (
+    productId: string
+  ): ProductConversionStats | undefined => {
     const stats = conversionStats.find((stat) => stat.productId === productId);
     if (stats) {
-      console.log("Product stats for", productId, ":", stats);
     }
     return stats;
   };
 
-  // Helper: Get trending rank for a product
   const getTrendingRank = (productId: string): number | null => {
     const trending = trendingProducts.find((t) => t.productId === productId);
     return trending ? trending.rank : null;
   };
 
-  // Helper: Handle product click
   const handleProductClick = (productId: string) => {
     if (onProductClick) {
       onProductClick(productId);
@@ -191,39 +189,41 @@ export const ProductList: React.FC<ProductListProps> = ({
               )}
 
               {/* Conversion Stats (Creator Only) */}
-              {isCreator && (() => {
-                const stats = getProductStats(activeProduct.id);
-                if (stats) {
-                  const uniqueClicks = stats.uniqueClicks ?? 0;
-                  const conversionRate = typeof stats.conversionRate === 'number'
-                    ? stats.conversionRate
-                    : parseFloat(stats.conversionRate as any) || 0;
+              {isCreator &&
+                (() => {
+                  const stats = getProductStats(activeProduct.id);
+                  if (stats) {
+                    const uniqueClicks = stats.uniqueClicks ?? 0;
+                    const conversionRate =
+                      typeof stats.conversionRate === "number"
+                        ? stats.conversionRate
+                        : parseFloat(stats.conversionRate as any) || 0;
 
-                  return (
-                    <div
-                      style={{
-                        marginTop: "0.75rem",
-                        padding: "0.5rem",
-                        backgroundColor: "#0a0a0a",
-                        borderRadius: "6px",
-                        fontSize: "0.75rem",
-                        color: "#9ca3af",
-                      }}
-                    >
-                      <div style={{ marginBottom: "0.25rem" }}>
-                        <span style={{ fontWeight: "600" }}>
-                          {uniqueClicks} click{uniqueClicks !== 1 ? "s" : ""}
-                        </span>
-                        {" • "}
-                        <span style={{ color: "#10b981", fontWeight: "600" }}>
-                          {conversionRate.toFixed(1)}% conversion
-                        </span>
+                    return (
+                      <div
+                        style={{
+                          marginTop: "0.75rem",
+                          padding: "0.5rem",
+                          backgroundColor: "#0a0a0a",
+                          borderRadius: "6px",
+                          fontSize: "0.75rem",
+                          color: "#9ca3af",
+                        }}
+                      >
+                        <div style={{ marginBottom: "0.25rem" }}>
+                          <span style={{ fontWeight: "600" }}>
+                            {uniqueClicks} click{uniqueClicks !== 1 ? "s" : ""}
+                          </span>
+                          {" • "}
+                          <span style={{ color: "#10b981", fontWeight: "600" }}>
+                            {stats.conversionRate}% conversion
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  );
-                }
-                return null;
-              })()}
+                    );
+                  }
+                  return null;
+                })()}
 
               {/* Visit Store Button */}
               {onProductClick && (
@@ -298,7 +298,9 @@ export const ProductList: React.FC<ProductListProps> = ({
           {activeProduct ? "All Featured Products" : "Featured Products"}
         </h4>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
+        >
           {(activeProduct ? otherProducts : products).map((product) => {
             const stats = getProductStats(product.id);
             const trendingRank = getTrendingRank(product.id);
@@ -311,7 +313,9 @@ export const ProductList: React.FC<ProductListProps> = ({
                   backgroundColor: "#1a1a1a",
                   borderRadius: "8px",
                   overflow: "hidden",
-                  border: isTrending ? "1px solid #fbbf24" : "1px solid #2a2a2a",
+                  border: isTrending
+                    ? "1px solid #fbbf24"
+                    : "1px solid #2a2a2a",
                   transition: "border-color 0.2s",
                   position: "relative",
                 }}
@@ -405,30 +409,26 @@ export const ProductList: React.FC<ProductListProps> = ({
                     </div>
 
                     {/* Conversion Stats (Creator Only) */}
-                    {isCreator && stats && (() => {
-                      const uniqueClicks = stats.uniqueClicks ?? 0;
-                      const conversionRate = typeof stats.conversionRate === 'number'
-                        ? stats.conversionRate
-                        : parseFloat(stats.conversionRate as any) || 0;
+                    {isCreator &&
+                      stats &&
+                      (() => {
+                        const uniqueClicks = stats.uniqueClicks ?? 0;
 
-                      return (
-                        <div
-                          style={{
-                            fontSize: "0.7rem",
-                            color: "#6b7280",
-                            marginTop: "0.25rem",
-                          }}
-                        >
-                          <span style={{ fontWeight: "600" }}>
-                            {uniqueClicks} click{uniqueClicks !== 1 ? "s" : ""}
-                          </span>
-                          {" • "}
-                          <span style={{ color: "#10b981" }}>
-                            {conversionRate.toFixed(1)}%
-                          </span>
-                        </div>
-                      );
-                    })()}
+                        return (
+                          <div
+                            style={{
+                              fontSize: "0.7rem",
+                              color: "#6b7280",
+                              marginTop: "0.25rem",
+                            }}
+                          >
+                            <span style={{ fontWeight: "600" }}>
+                              {uniqueClicks} click
+                              {uniqueClicks !== 1 ? "s" : ""}
+                            </span>
+                          </div>
+                        );
+                      })()}
                   </div>
                 </div>
 

@@ -3,23 +3,22 @@
 import Link from "next/link";
 import { useAuth } from "../contexts/auth-context";
 import { useState } from "react";
+import { useRouter } from "next/dist/client/components/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
   const { user, logout, isLoading } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  console.log("current user", user);
-
   const handleLogout = () => {
     logout();
     setShowDropdown(false);
-    window.location.href = "/";
+    router.push("/");
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // Implement search functionality
-    console.log("Searching for:", searchQuery);
   };
 
   return (

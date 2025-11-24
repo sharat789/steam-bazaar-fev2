@@ -26,28 +26,19 @@ export const sessionService = {
   // Create new session
   create: async (data: CreateSessionDto): Promise<Session> => {
     try {
-      console.log("Sending session create request with data:", JSON.stringify(data, null, 2));
       const response = await apiClient.post("/sessions", data);
-      console.log("Session create full response:", response);
-      console.log("Session create response.data:", response.data);
 
       // Handle different response formats
       if (response.data.data) {
-        console.log("Using response.data.data format");
         return response.data.data;
       } else if (response.data.success && response.data.session) {
-        console.log("Using response.data.session format");
         return response.data.session;
       } else if (response.data.id) {
-        console.log("Using response.data format (direct session)");
         return response.data;
       } else {
-        console.error("Unexpected session create response format:", response.data);
         throw new Error("Invalid response format from server");
       }
     } catch (error: any) {
-      console.error("Error creating session:", error);
-      console.error("Error response:", error.response?.data);
       throw error;
     }
   },

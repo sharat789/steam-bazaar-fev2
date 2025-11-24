@@ -4,7 +4,7 @@ import {
   CurrentUserResponse,
   RegisterDto,
   UpdateUserDto,
-  UpdateUserResponse
+  UpdateUserResponse,
 } from "../types/auth";
 
 export const AuthService = {
@@ -42,7 +42,6 @@ export const AuthService = {
     const response = await apiClient.get<CurrentUserResponse>(
       "/auth/currentUser"
     );
-    console.log("Current User Response:", response.data);
     return response.data;
   },
 
@@ -52,7 +51,10 @@ export const AuthService = {
   },
 
   update: async (data: UpdateUserDto): Promise<UpdateUserResponse> => {
-    const response = await apiClient.post<UpdateUserResponse>("/auth/update", data);
+    const response = await apiClient.post<UpdateUserResponse>(
+      "/auth/update",
+      data
+    );
     return response.data;
   },
 };

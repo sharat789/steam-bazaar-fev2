@@ -11,7 +11,11 @@ import { useReactionOverlay } from "@/src/components/reaction-overlay";
 import { FloatingReaction } from "@/src/components/floating-reaction";
 import { useWebSocket } from "@/src/hooks/useWebSocket";
 import { useAuth } from "@/src/contexts/auth-context";
-import { Reaction, ReactionStats as ReactionStatsType, ChatMessage } from "@/src/types/chat";
+import {
+  Reaction,
+  ReactionStats as ReactionStatsType,
+  ChatMessage,
+} from "@/src/types/chat";
 import { SessionConversionStats } from "@/src/types/analytics";
 
 export default function SessionControlPage({
@@ -34,8 +38,9 @@ export default function SessionControlPage({
   const [activeProductId, setActiveProductId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [viewerCount, setViewerCount] = useState(0);
-  const [conversionStats, setConversionStats] = useState<SessionConversionStats | null>(null);
-  const { reactions, addReaction, removeReaction} = useReactionOverlay();
+  const [conversionStats, setConversionStats] =
+    useState<SessionConversionStats | null>(null);
+  const { reactions, addReaction, removeReaction } = useReactionOverlay();
 
   const {
     localVideoTrack,
@@ -74,28 +79,20 @@ export default function SessionControlPage({
       setReactionStats(stats);
     },
     onProductShowcased: (data) => {
-      console.log("Product showcased:", data);
       setActiveProductId(data.productId);
     },
     onShowcaseCleared: () => {
-      console.log("Showcase cleared");
       setActiveProductId(null);
     },
     onProductClickStats: (stats: SessionConversionStats) => {
-      console.log("Received product click stats:", stats);
       setConversionStats(stats);
     },
   });
 
   useEffect(() => {
-    console.log("SessionControlPage mounted");
-    console.log("Session ID:", id);
-    console.log("Username:", username);
-
     if (id) {
       fetchSession();
     } else {
-      console.error("No session ID in params!");
       setError("No session ID provided");
       setLoading(false);
     }
@@ -112,16 +109,13 @@ export default function SessionControlPage({
     try {
       setLoading(true);
       setError(null);
-      console.log("Fetching session with ID:", id);
       const data = await sessionService.getById(id);
-      console.log("Fetched session data:", data);
       setSession(data);
       // Initialize activeProductId from session data
       if (data.activeProductId) {
         setActiveProductId(data.activeProductId);
       }
     } catch (err) {
-      console.error("Error fetching session:", err);
       setError("Failed to load session");
     } finally {
       setLoading(false);
@@ -139,7 +133,6 @@ export default function SessionControlPage({
         setActiveProductId(productId);
       }
     } catch (err) {
-      console.error("Error showcasing product:", err);
       setError("Failed to showcase product");
     }
   };
@@ -155,7 +148,6 @@ export default function SessionControlPage({
         setActiveProductId(null);
       }
     } catch (err) {
-      console.error("Error clearing showcase:", err);
       setError("Failed to clear showcase");
     }
   };
@@ -166,8 +158,6 @@ export default function SessionControlPage({
     try {
       setIsStartingStream(true);
       setError(null);
-
-      console.log("Starting stream for session:", session.id);
 
       // Get Agora token from backend
       const token = await sessionService.startStream(session.id);
@@ -182,24 +172,15 @@ export default function SessionControlPage({
       setStreamToken(token);
 
       // Join Agora channel as host
-      console.log("Joining Agora channel as host...");
       await joinAsHost(token);
-      console.log("Successfully joined channel");
-
       // Wait a bit to ensure connection is fully established
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       // Start publishing video and audio
-      console.log("Starting to publish...");
       await startPublishing();
-      console.log("Publishing started successfully");
-
       // Refresh session to get updated status
       await fetchSession();
-
-      console.log("Stream started successfully!");
     } catch (err) {
-      console.error("Error starting stream:", err);
       setError(err instanceof Error ? err.message : "Failed to start stream");
     } finally {
       setIsStartingStream(false);
@@ -214,7 +195,6 @@ export default function SessionControlPage({
         await fetchSession();
       }
     } catch (err) {
-      console.error("Error pausing stream:", err);
       setError("Failed to pause stream");
     }
   };
@@ -227,7 +207,6 @@ export default function SessionControlPage({
         await fetchSession();
       }
     } catch (err) {
-      console.error("Error resuming stream:", err);
       setError("Failed to resume stream");
     }
   };
@@ -255,9 +234,7 @@ export default function SessionControlPage({
       await fetchSession();
 
       setStreamToken(null);
-      console.log("Stream ended successfully!");
     } catch (err) {
-      console.error("Error ending stream:", err);
       setError("Failed to end stream");
     }
   };
@@ -557,48 +534,6 @@ export default function SessionControlPage({
               </div>
             )}
           </div>
-
-          {/* Media Controls */}
-          {(isLive || isPaused) && (
-            <div
-              style={{
-                marginTop: "1rem",
-                display: "flex",
-                gap: "0.5rem",
-              }}
-            >
-              <button
-                onClick={toggleAudio}
-                style={{
-                  padding: "0.75rem 1.5rem",
-                  backgroundColor: localAudioTrack?.enabled
-                    ? "#3b82f6"
-                    : "#6b7280",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                }}
-              >
-                {localAudioTrack?.enabled ? "🎤 Mute" : "🔇 Unmute"}
-              </button>
-              <button
-                onClick={toggleVideo}
-                style={{
-                  padding: "0.75rem 1.5rem",
-                  backgroundColor: localVideoTrack?.enabled
-                    ? "#3b82f6"
-                    : "#6b7280",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                }}
-              >
-                {localVideoTrack?.enabled ? "📹 Stop Video" : "📷 Start Video"}
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Sidebar with Chat, Products, and Stats */}

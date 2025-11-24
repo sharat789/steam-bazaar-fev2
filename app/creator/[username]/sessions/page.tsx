@@ -41,7 +41,7 @@ export default function SessionsPage({
       setSessions(Array.isArray(response) ? response : []);
     } catch (error) {
       setError("Failed to fetch sessions");
-      console.error("Error fetching sessions:", error);
+    
       setSessions([]); // Set empty array on error
     } finally {
       setLoading(false);
@@ -54,7 +54,6 @@ export default function SessionsPage({
       const response = await productService.getAll();
       setProducts(Array.isArray(response) ? response : []);
     } catch (error) {
-      console.error("Error fetching products:", error);
       setProducts([]);
     } finally {
       setLoadingProducts(false);
@@ -101,17 +100,11 @@ export default function SessionsPage({
       newSession.productIds = selectedProductIds.map(id => String(id).trim());
     }
 
-    console.log("Creating session with data:", JSON.stringify(newSession, null, 2));
-    console.log("Selected product IDs:", selectedProductIds);
-    console.log("Product IDs type check:", selectedProductIds.map(id => typeof id));
-
     try {
       const createdSession = await sessionService.create(newSession);
-      console.log("Created session:", createdSession);
 
       // Check if session has an ID
       if (!createdSession || !createdSession.id) {
-        console.error("Session created but no ID returned:", createdSession);
         alert(
           "Session created but couldn't navigate to it. Please refresh the page."
         );
@@ -133,8 +126,6 @@ export default function SessionsPage({
       );
       router.push(`/creator/${username}/sessions/${createdSession.id}`);
     } catch (err: any) {
-      console.error("Failed to create session:", err);
-      console.error("Error response:", err.response?.data);
       alert(`Failed to create session: ${err.message || "Unknown error"}`);
     }
   };
@@ -146,7 +137,6 @@ export default function SessionsPage({
       await sessionService.delete(id);
       setSessions(sessions.filter((s) => s.id !== id));
     } catch (err) {
-      console.error("Failed to delete session:", err);
       alert("Failed to delete session. Please try again.");
     }
   };

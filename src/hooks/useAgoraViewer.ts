@@ -27,12 +27,8 @@ export const useAgoraViewer = () => {
 
     // Set up event listeners for remote users
     agoraClient.on("user-published", async (user, mediaType) => {
-      console.log("User published:", user.uid, "Media type:", mediaType);
-
       // Subscribe to the remote user
       await agoraClient.subscribe(user, mediaType);
-      console.log("Subscribed to user:", user.uid, mediaType);
-
       // If it's video, set the video track
       if (mediaType === "video") {
         setRemoteVideoTrack(user.videoTrack || null);
@@ -58,8 +54,6 @@ export const useAgoraViewer = () => {
     });
 
     agoraClient.on("user-unpublished", (user, mediaType) => {
-      console.log("User unpublished:", user.uid, mediaType);
-
       if (mediaType === "video") {
         setRemoteVideoTrack(null);
       }
@@ -70,7 +64,6 @@ export const useAgoraViewer = () => {
     });
 
     agoraClient.on("user-left", (user) => {
-      console.log("User left:", user.uid);
       setRemoteUsers((prev) => prev.filter((u) => u.uid !== user.uid));
       setRemoteVideoTrack(null);
       setRemoteAudioTrack(null);
@@ -93,7 +86,6 @@ export const useAgoraViewer = () => {
       try {
         setError(null);
 
-        console.log("Setting client role to audience...");
         // Set client role to audience (viewer)
         await setClientRole(client, "audience");
 
@@ -117,10 +109,7 @@ export const useAgoraViewer = () => {
         );
         setIsJoined(true);
       } catch (err) {
-        console.error("Error joining channel as audience:", err);
-        setError(
-          err instanceof Error ? err.message : "Failed to join channel"
-        );
+        setError(err instanceof Error ? err.message : "Failed to join channel");
         throw err;
       }
     },
@@ -143,10 +132,8 @@ export const useAgoraViewer = () => {
         setRemoteUsers([]);
         setRemoteVideoTrack(null);
         setRemoteAudioTrack(null);
-        console.log("Left channel");
       }
     } catch (err) {
-      console.error("Error leaving channel:", err);
       setError(err instanceof Error ? err.message : "Failed to leave channel");
     }
   }, [client, isJoined, remoteAudioTrack]);

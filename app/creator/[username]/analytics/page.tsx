@@ -43,7 +43,6 @@ export default function AnalyticsPage({
       const data = await analyticsService.getCreatorAnalytics(Number(user.id));
       setAnalytics(data);
     } catch (err) {
-      console.error("Error fetching analytics:", err);
       setError("Failed to load analytics data");
     } finally {
       setLoading(false);
@@ -381,9 +380,6 @@ export default function AnalyticsPage({
           <div style={{ fontSize: "0.875rem", color: "#9ca3af" }}>
             <p style={{ margin: "0.25rem 0" }}>
               Unique users: {analytics.products.uniqueUsers}
-            </p>
-            <p style={{ margin: "0.25rem 0" }}>
-              Avg CTR: {analytics.products.averageCTR.toFixed(1)}%
             </p>
           </div>
         </div>

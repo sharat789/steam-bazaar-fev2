@@ -49,7 +49,6 @@ export default function ProductsPage() {
       await productService.delete(id);
       setProducts(products.filter((p) => p.id !== id));
     } catch (err) {
-      console.error("Failed to delete product:", err);
       alert("Failed to delete product. Please try again.");
     }
   };
@@ -79,7 +78,6 @@ export default function ProductsPage() {
       setAddProductModal(false);
       form.reset();
     } catch (err) {
-      console.error("Failed to create product:", err);
       alert("Failed to create product. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -113,7 +111,6 @@ export default function ProductsPage() {
       setEditProductModal(false);
       setSelectedProduct(null);
     } catch (err) {
-      console.error("Failed to update product:", err);
       alert("Failed to update product. Please try again.");
     } finally {
       setIsSubmitting(false);

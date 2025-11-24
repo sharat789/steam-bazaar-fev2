@@ -1,14 +1,15 @@
 "use client";
 
 import { useAuth } from "@/src/contexts/auth-context";
+import { useRouter } from "next/dist/client/components/navigation";
 import { useState } from "react";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const { register } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"viewer" | "creator">("viewer");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +20,7 @@ export default function RegisterPage() {
     try {
       await register(email, name, password);
       setTimeout(() => {
-        window.location.href = "/";
+        router.push("/");
       }, 100);
     } catch (err) {
       setError("Registration failed. Error: " + (err as Error).message);
@@ -139,37 +140,6 @@ export default function RegisterPage() {
                 outline: "none",
               }}
             />
-          </div>
-          <div style={{ marginBottom: "1rem" }}>
-            <label
-              htmlFor="role"
-              style={{
-                display: "block",
-                marginBottom: "0.5rem",
-                color: "#e5e7eb",
-                fontSize: "0.875rem",
-              }}
-            >
-              Role:
-            </label>
-            <select
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value as "viewer" | "creator")}
-              style={{
-                width: "100%",
-                padding: "0.75rem",
-                backgroundColor: "#2a2a2a",
-                border: "1px solid #3a3a3a",
-                borderRadius: "6px",
-                color: "#ffffff",
-                fontSize: "0.875rem",
-                outline: "none",
-              }}
-            >
-              <option value="viewer">Viewer</option>
-              <option value="creator">Creator</option>
-            </select>
           </div>
           {error && (
             <div

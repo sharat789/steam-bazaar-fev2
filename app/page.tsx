@@ -26,7 +26,6 @@ export default function Home() {
       setLiveUsers(response);
     } catch (error) {
       setError("Failed to fetch live users");
-      console.error("Error fetching live users:", error);
     } finally {
       setLoading(false);
     }
@@ -56,7 +55,14 @@ export default function Home() {
       </div>
 
       {/* Filters */}
-      <div style={{ marginBottom: "2rem", display: "flex", gap: "1rem", alignItems: "center" }}>
+      <div
+        style={{
+          marginBottom: "2rem",
+          display: "flex",
+          gap: "1rem",
+          alignItems: "center",
+        }}
+      >
         <button
           onClick={() => setCategory("")}
           style={{
@@ -151,8 +157,7 @@ export default function Home() {
             <div
               key={user.id}
               onClick={() =>
-                user.liveSession &&
-                router.push(`/watch/${user.liveSession.id}`)
+                user.liveSession && router.push(`/watch/${user.liveSession.id}`)
               }
               style={{
                 backgroundColor: "#1a1a1a",
@@ -165,8 +170,7 @@ export default function Home() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.boxShadow =
-                  "0 10px 20px rgba(0,0,0,0.5)";
+                e.currentTarget.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";

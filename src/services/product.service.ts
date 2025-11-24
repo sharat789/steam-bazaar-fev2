@@ -21,7 +21,6 @@ export interface UpdateProductDto {
 export const productService = {
   getAll: async (): Promise<Product[]> => {
     const response = await apiClient.get("/products");
-    console.log("Fetched products:", response.data);
     return response.data;
   },
 
